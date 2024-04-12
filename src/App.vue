@@ -4,6 +4,14 @@ import { ref } from "vue";
 const showModal = ref(false);
 const newNote = ref("");
 const notes = ref([]);
+
+const addNote = () => {
+  notes.value.push({
+    id:Math.floor(Math.random),
+    text:newNote.value,
+    date:new Date(),
+  })
+}
 </script>
 
 <template>
