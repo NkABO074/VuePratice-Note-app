@@ -1,17 +1,30 @@
-<script setup></script>
+<script setup>
+import { ref } from "vue";
+
+const showModal = ref(false);
+const newNote = ref("");
+const notes = ref([]);
+</script>
+
 <template>
   <main>
-    <div class="overlay">
+    <div v-if="showModal" class="overlay">
       <div class="modal">
-        <textarea name="note" id="note" cols="30" rows="10"></textarea>
+        <textarea
+          v-model="newNote"
+          name="note"
+          id="note"
+          cols="30"
+          rows="10"
+        ></textarea>
         <button>Add Note</button>
-        <button class="close">Close</button>
+        <button class="close" @click="showModal = false">Close</button>
       </div>
     </div>
     <div class="container">
       <header>
         <h1>Notes</h1>
-        <button>+</button>
+        <button @click="showModal = true">+</button>
       </header>
       <div class="card-container">
         <div class="card">
