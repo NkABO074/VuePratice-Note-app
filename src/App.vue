@@ -5,13 +5,20 @@ const showModal = ref(false);
 const newNote = ref("");
 const notes = ref([]);
 
+function getRandomLightColor() {
+  return ("hls(" + Math.random() * 360 + ", 100%, 75%)");
+}
+
 const addNote = () => {
   notes.value.push({
-    id:Math.floor(Math.random),
-    text:newNote.value,
-    date:new Date(),
-  })
-}
+    id: Math.floor(Math.random * 1000000),
+    text: newNote.value,
+    date: new Date(),
+    bg_color: getRandomLightColor(),
+  });
+  showModal.value = false;
+  newNote.value = "";
+};
 </script>
 
 <template>
@@ -25,7 +32,7 @@ const addNote = () => {
           cols="30"
           rows="10"
         ></textarea>
-        <button>Add Note</button>
+        <button @click="addNote">Add Note</button>
         <button class="close" @click="showModal = false">Close</button>
       </div>
     </div>
@@ -109,13 +116,14 @@ header button {
 
 .overlay {
   position: absolute;
-  width: 100%;
-  height: 100%;
-  background-color: rgb(0 0 0 /77%);
+  width: 100vw;
+  height: 100vh;
+  background-color: rgb(0 0 0 /50%);
   z-index: 10;
   display: flex;
   align-items: center;
   justify-content: center;
+  backdrop-filter: blur(10px);
 }
 
 .modal {
