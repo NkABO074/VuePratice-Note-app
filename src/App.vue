@@ -5,8 +5,13 @@ const showModal = ref(false);
 const newNote = ref("");
 const notes = ref([]);
 
+/**
+ * return speudo-random light color
+ * @returns {String} a light tone color 
+ */
 function getRandomLightColor() {
-  return ("hls(" + Math.random() * 360 + ", 100%, 75%)");
+  const HUE = Math.random() * 360;
+  return `hsl(${HUE}, 100%, 75%)`;
 }
 
 const addNote = () => {
@@ -41,23 +46,26 @@ const addNote = () => {
         <h1>Notes</h1>
         <button @click="showModal = true">+</button>
       </header>
+
       <div class="card-container">
-        <div class="card">
+
+        <div v-for="note in notes" class="card" :style="{backgroundColor: note.bg_color}">
           <p class="main-text">
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-            Consectetur, nobis temporibus aspernatur quae quaerat.
+            {{ note.text }}
           </p>
-          <p class="date">04/04/2024</p>
+          <p class="date">{{ note.date.toLocaleDateString("en-US") }}</p>
         </div>
+
       </div>
+
     </div>
   </main>
 </template>
 
 <style scoped>
 main {
-  height: 100vh;
-  width: 100vw;
+  height: 100%;
+  width: 100%;
   font-family: Montserrat, sans-serif;
 }
 
