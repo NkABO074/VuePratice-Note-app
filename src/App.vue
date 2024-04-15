@@ -1,8 +1,10 @@
 <script setup>
 import { ref } from "vue";
 
+// states
 const showModal = ref(false);
 const newNote = ref("");
+const errorMessage = ref();
 const notes = ref([]);
 
 /**
@@ -14,15 +16,23 @@ function getRandomLightColor() {
   return `hsl(${HUE}, 100%, 75%)`;
 }
 
+/**
+ *  Append each note to the notes states array
+ * @returns {String} if value inferior to 10 chars
+ */
 const addNote = () => {
+  if(newNote.value.length < 10) {
+    return errorMessage.value = "Notes need to be at least 10 characters long"
+  }
   notes.value.push({
-    id: Math.floor(Math.random * 1000000),
+    id: Math.floor(Math.random * 10000000),
     text: newNote.value,
     date: new Date(),
     bg_color: getRandomLightColor(),
   });
   showModal.value = false;
   newNote.value = "";
+  errorMessage.value = "";
 };
 </script>
 
@@ -31,12 +41,13 @@ const addNote = () => {
     <div v-if="showModal" class="overlay">
       <div class="modal">
         <textarea
-          v-model="newNote"
+          v-model.trim="newNote"
           name="note"
           id="note"
           cols="30"
           rows="10"
         ></textarea>
+        <p v-if="errorMessage">{{ errorMessage }}</p>
         <button @click="addNote">Add Note</button>
         <button class="close" @click="showModal = false">Close</button>
       </div>
@@ -49,11 +60,11 @@ const addNote = () => {
 
       <div class="card-container">
 
-        <div v-for="note in notes" class="card" :style="{backgroundColor: note.bg_color}">
-          <p class="main-text">
-            {{ note.text }}
+        <div v-for="note in notes" class="card" :style="{backgroundColor: note.bg_color}" :key="note.id">
+          <p class="main-text">{{ note.text }} {{ note.id }}</p>
+          <p class="date">
+            {{ note.date.toLocaleDateString("en-US") }}
           </p>
-          <p class="date">{{ note.date.toLocaleDateString("en-US") }}</p>
         </div>
 
       </div>
@@ -123,7 +134,7 @@ header button {
 }
 
 .overlay {
-  position: absolute;
+  position: fixed;
   width: 100vw;
   height: 100vh;
   background-color: rgb(0 0 0 /50%);
@@ -136,7 +147,7 @@ header button {
 
 .modal {
   widows: 750px;
-  background-color: white;
+  background-color: whitesmoke;
   border-radius: 10px;
   padding: 30px;
   position: relative;
@@ -160,5 +171,9 @@ header button {
 .modal .close {
   background-color: red;
   margin-top: 7px;
+}
+
+.modal p {
+  color:red;
 }
 </style>
